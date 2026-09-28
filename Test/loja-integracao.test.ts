@@ -165,3 +165,32 @@ test(
   },
   15000,
 );
+
+
+test (
+  "apagar um produto que está adicionado ao carrinho", async () => {
+    const token = await criarUsuarioEObterToken();
+    const idProduto = await criarProduto(token);
+
+    await criarCarrinho(token, idProduto);
+
+    // Antes do cancelamento, o estoque deve estar em 7
+    const consultaAntes = await fetch(
+      `${loja}/produtos/${idProduto}`,
+    );
+
+    expect(consultaAntes.status).toBe(200);
+
+    const produtoAntes = (await consultaAntes.json()) as {
+      quantidade: number;
+    };
+
+    expect(produtoAntes.quantidade).toBe(7);
+
+    const apagarProduto = await fetch(`${loja}/produtos/${idProduto}`, {
+       method: "DELETE",
+    }
+     
+    )
+  }
+)
